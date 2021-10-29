@@ -6,7 +6,7 @@
 /*   By: goliano- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 15:59:35 by goliano-          #+#    #+#             */
-/*   Updated: 2021/10/28 16:43:17 by goliano-         ###   ########.fr       */
+/*   Updated: 2021/10/29 17:11:49 by goliano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 size_t	ft_strlen(char const *s);
 char	*ft_strjoin(char const *s1, char const *s2);
@@ -22,5 +23,9 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 void    *ft_calloc(size_t count, size_t size);
 void    *ft_memset(void *b, int c, size_t len);
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
+char	*ft_strtrim(char const *s1, char const *set);
+char	**ft_split(char const *s, char c);
+char	*ft_strcatslash(char *dst);
 
 #endif
