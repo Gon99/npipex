@@ -16,6 +16,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 size_t	ft_strlen(char const *s);
 char	*ft_strjoin(char const *s1, char const *s2);
@@ -27,5 +30,6 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_strtrim(char const *s1, char const *set);
 char	**ft_split(char const *s, char c);
 char	*ft_strcatslash(char *dst);
+int	ft_atoi(const char *str);
 
 #endif

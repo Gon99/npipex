@@ -13,7 +13,7 @@
 SRCS =	./utils/ft_strlen.c ./utils/ft_strjoin.c ./utils/ft_substr.c \
 		./utils/ft_calloc.c ./utils/ft_memset.c ./srcs/pipex.c \
 		./utils/ft_strnstr.c ./utils/ft_strncmp.c ./utils/ft_strtrim.c \
-		./utils/ft_split.c ./utils/ft_strcatslash.c
+		./utils/ft_split.c ./utils/ft_strcatslash.c ./utils/ft_atoi.c
 
 CC = gcc
 
