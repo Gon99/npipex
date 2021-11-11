@@ -6,7 +6,7 @@
 /*   By: goliano- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 15:59:35 by goliano-          #+#    #+#             */
-/*   Updated: 2021/10/29 17:11:49 by goliano-         ###   ########.fr       */
+/*   Updated: 2021/11/11 16:43:36 by goliano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_strtrim(char const *s1, char const *set);
 char	**ft_split(char const *s, char c);
-char	*ft_strcatslash(char *dst);
-int	ft_atoi(const char *str);
+int		check_cmd_path(char *cmd);
+int		handle_path(char *cmd, char **envp);
 
 #endif

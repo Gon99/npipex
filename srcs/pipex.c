@@ -6,41 +6,11 @@
 /*   By: goliano- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 15:32:36 by goliano-          #+#    #+#             */
-/*   Updated: 2021/11/11 15:08:27 by goliano-         ###   ########.fr       */
+/*   Updated: 2021/11/11 17:01:29 by goliano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../include/pipex.h"
-
-int	handle_path(char *cmd, char **envp)
-{
-	int		i;
-	char	*path;
-	char	**all_paths;
-	char	*cmd_one;
-	char	**mycmdargs;
-
-	i = -1;
-	while (envp[++i])
-		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
-			break ;
-	path = ft_strtrim(envp[i], "PATH=");
-	all_paths = ft_split(path, ':');
-	mycmdargs = ft_split(cmd, ' ');
-	i = 0;
-	while (all_paths[i])
-	{
-		cmd_one = ft_strjoin(all_paths[i], mycmdargs[0]);
-		if (access(cmd_one, F_OK | R_OK | X_OK) > -1)
-		{
-			execve(cmd_one, mycmdargs, envp);
-			return (1);
-		}
-		i++;
-	}
-	perror("zsh");
-	exit(EXIT_FAILURE);
-}
+#include "../include/pipex.h"
 
 static void	do_child_one(int fd, char *cmd, int *end, char **envp)
 {
@@ -50,20 +20,6 @@ static void	do_child_one(int fd, char *cmd, int *end, char **envp)
 	dup2(end[1], STDOUT_FILENO);
 	handle_path(cmd, envp);
 }
-
-/*static void	do_parent_one(char *cfd, char *cmd, int *end, char **envp)
-{
-	int status;
-	int	fd;
-
-	status = 0;
-	close(end[1]);
-	dup2(end[0], STDIN_FILENO);
-	fd = open(cfd, O_CREAT | O_RDWR | O_TRUNC, 0644);
-	dup2(fd, STDOUT_FILENO);
-	close(fd);
-	handle_path(cmd, envp);
-}*/
 
 static char	*handle_cmd(char *cmd)
 {
@@ -84,22 +40,18 @@ static char	*handle_cmd(char *cmd)
 	return (n_cmd);
 }
 
-void	do_child_two(int fd, char *cmd, int *end, char **envp)
+static void	do_child_two(int fd, char *cmd, int *end, char **envp)
 {
 	close(end[1]);
-	/*fd = open(cfd, O_CREAT | O_RDWR | O_TRUNC, 0644);
-	if (fd < 0)
-		return ;*/
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 	dup2(end[0], STDIN_FILENO);
-	//close(end[0]);
 	handle_path(cmd, envp);
 }
 
 static void	pipex(int fd1, int fd2, char **argv, char **envp)
 {
-	int	end[2];
+	int		end[2];
 	pid_t	p1;
 	pid_t	p2;
 	int		status;
@@ -125,17 +77,11 @@ static void	pipex(int fd1, int fd2, char **argv, char **envp)
 		return ;
 }
 
-/*void	leaks(void)
-{
-	system("leaks -q pipex");
-}*/
-
 int	main(int argc, char **argv, char **envp)
 {
 	int	fd1;
 	int	fd2;
-	
-	//atexit(leaks);
+
 	if (argc == 0)
 		return (1);
 	fd1 = open(argv[1], O_RDONLY);
@@ -145,8 +91,10 @@ int	main(int argc, char **argv, char **envp)
 		perror("Error");
 		return (0);
 	}
-	argv[2] = handle_cmd(argv[2]);
-	argv[3] = handle_cmd(argv[3]);
+	if (check_cmd_path(argv[2]))
+		argv[2] = handle_cmd(argv[2]);
+	if (check_cmd_path(argv[3]))
+		argv[3] = handle_cmd(argv[3]);
 	pipex(fd1, fd2, argv, envp);
 	return (0);
 }
