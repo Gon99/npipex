@@ -6,15 +6,14 @@
 #    By: goliano- <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/28 16:03:52 by goliano-          #+#    #+#              #
-#    Updated: 2021/11/11 16:43:16 by goliano-         ###   ########.fr        #
+#    Updated: 2021/11/12 13:02:18 by goliano-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS =	./utils/ft_strlen.c ./utils/ft_strjoin.c ./utils/ft_substr.c \
 		./utils/ft_calloc.c ./utils/ft_memset.c ./srcs/pipex.c \
 		./utils/ft_strnstr.c ./utils/ft_strncmp.c ./utils/ft_strtrim.c \
-		./utils/ft_split.c ./utils/ft_strcatslash.c ./utils/ft_atoi.c \
-		./srcs/path.c
+		./utils/ft_split.c ./utils/ft_strcatslash.c ./srcs/path.c
 
 CC = gcc
 

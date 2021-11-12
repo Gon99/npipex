@@ -6,7 +6,7 @@
 /*   By: goliano- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 16:37:31 by goliano-          #+#    #+#             */
-/*   Updated: 2021/11/11 17:01:31 by goliano-         ###   ########.fr       */
+/*   Updated: 2021/11/12 12:38:50 by goliano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	check_cmd_path(char *cmd)
 	return (r);
 }
 
-int	check_access(char *cmd, char **mycmdargs, char **envp)
+static int	check_access(char *cmd, char **mycmdargs, char **envp)
 {
 	int	r;
 
@@ -35,6 +35,33 @@ int	check_access(char *cmd, char **mycmdargs, char **envp)
 	return (r);
 }
 
+static int	handle_error(char **all_paths)
+{
+	int	r;
+
+	r = 0;
+	if (!all_paths)
+	{
+		perror("zsh");
+		r = 1;
+	}
+	return (r);
+}
+
+static int	path_index(char **envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i])
+	{
+		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
+			break ;
+		i++;
+	}
+	return (i);
+}
+
 int	handle_path(char *cmd, char **envp)
 {
 	int		i;
@@ -43,27 +70,21 @@ int	handle_path(char *cmd, char **envp)
 	char	*cmd_one;
 	char	**mycmdargs;
 
-	i = -1;
-	while (envp[++i])
-		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
-			break ;
+	i = path_index(envp);
 	path = ft_strtrim(envp[i], "PATH=");
 	all_paths = ft_split(path, ':');
 	mycmdargs = ft_split(cmd, ' ');
-	i = 0;
 	if (check_access(cmd, mycmdargs, envp))
 		return (1);
-	if (!all_paths)
-	{
-		perror("command not found");
+	if (handle_error(all_paths))
 		exit(EXIT_FAILURE);
-	}
-	while (all_paths[i])
+	i = -1;
+	while (all_paths[++i])
 	{
 		cmd_one = ft_strjoin(all_paths[i], mycmdargs[0]);
 		if (check_access(cmd_one, mycmdargs, envp))
 			return (1);
-		i++;
+		free(cmd_one);
 	}
 	perror("zsh");
 	exit(EXIT_FAILURE);

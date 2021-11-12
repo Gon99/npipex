@@ -5,21 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: goliano- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/28 15:32:36 by goliano-          #+#    #+#             */
-/*   Updated: 2021/11/11 17:01:29 by goliano-         ###   ########.fr       */
+/*   Created: 2021/11/12 12:39:06 by goliano-          #+#    #+#             */
+/*   Updated: 2021/11/12 13:02:26 by goliano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
-
-static void	do_child_one(int fd, char *cmd, int *end, char **envp)
-{
-	close(end[0]);
-	dup2(fd, STDIN_FILENO);
-	close(fd);
-	dup2(end[1], STDOUT_FILENO);
-	handle_path(cmd, envp);
-}
 
 static char	*handle_cmd(char *cmd)
 {
@@ -38,6 +29,15 @@ static char	*handle_cmd(char *cmd)
 		n_cmd[l++] = cmd[i++];
 	n_cmd[l] = '\0';
 	return (n_cmd);
+}
+
+static void	do_child_one(int fd, char *cmd, int *end, char **envp)
+{
+	close(end[0]);
+	dup2(fd, STDIN_FILENO);
+	close(fd);
+	dup2(end[1], STDOUT_FILENO);
+	handle_path(cmd, envp);
 }
 
 static void	do_child_two(int fd, char *cmd, int *end, char **envp)
@@ -82,7 +82,7 @@ int	main(int argc, char **argv, char **envp)
 	int	fd1;
 	int	fd2;
 
-	if (argc == 0)
+	if (argc != 5)
 		return (1);
 	fd1 = open(argv[1], O_RDONLY);
 	fd2 = open(argv[4], O_CREAT | O_RDWR | O_TRUNC, 0644);
