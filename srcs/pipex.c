@@ -6,7 +6,7 @@
 /*   By: goliano- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 12:39:06 by goliano-          #+#    #+#             */
-/*   Updated: 2021/11/12 13:02:26 by goliano-         ###   ########.fr       */
+/*   Updated: 2022/06/27 11:43:16 by goliano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ int	main(int argc, char **argv, char **envp)
 		argv[2] = handle_cmd(argv[2]);
 	if (check_cmd_path(argv[3]))
 		argv[3] = handle_cmd(argv[3]);
+	printf("ARGV[2]: %s\n", argv[2]);
+	printf("ARGV[3]: %s\n", argv[3]);
 	pipex(fd1, fd2, argv, envp);
 	return (0);
 }

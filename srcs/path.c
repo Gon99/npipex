@@ -6,7 +6,7 @@
 /*   By: goliano- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 16:37:31 by goliano-          #+#    #+#             */
-/*   Updated: 2021/11/12 12:38:50 by goliano-         ###   ########.fr       */
+/*   Updated: 2022/06/27 11:43:14 by goliano-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,26 @@ int	check_cmd_path(char *cmd)
 	return (r);
 }
 
-static int	check_access(char *cmd, char **mycmdargs, char **envp)
+static int	check_access(char *cmd, char **mycmdargs, char **envp, int t)
 {
 	int	r;
 
 	r = 0;
-	if (access(cmd, X_OK) > -1)
+	if (t)
 	{
-		execve(cmd, mycmdargs, envp);
-		r = 1;
+		if (access(cmd, X_OK) > -1)
+		{
+			execve(cmd, mycmdargs, envp);
+			r = 1;
+		}
+	}
+	else
+	{
+		if (access(mycmdargs[0], X_OK) > -1)
+		{
+			execve(mycmdargs[0], mycmdargs, envp);
+			r = 1;
+		}
 	}
 	return (r);
 }
@@ -74,16 +85,16 @@ int	handle_path(char *cmd, char **envp)
 	path = ft_strtrim(envp[i], "PATH=");
 	all_paths = ft_split(path, ':');
 	mycmdargs = ft_split(cmd, ' ');
-	if (check_access(cmd, mycmdargs, envp))
-		return (1);
 	if (handle_error(all_paths))
 		exit(EXIT_FAILURE);
+	if (check_access(cmd, mycmdargs, envp, 0))
+		exit(EXIT_SUCCESS);
 	i = -1;
 	while (all_paths[++i])
 	{
 		cmd_one = ft_strjoin(all_paths[i], mycmdargs[0]);
-		if (check_access(cmd_one, mycmdargs, envp))
-			return (1);
+		if (check_access(cmd_one, mycmdargs, envp, 1))
+			exit(EXIT_SUCCESS);
 		free(cmd_one);
 	}
 	perror("zsh");
